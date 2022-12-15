@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import connection
+from rentals.models import PreviousReservation
 
 def get_reservations():
     with connection.cursor() as cursor:
@@ -25,5 +26,5 @@ def get_reservations():
 
 def index(request):
     context = {}
-    context['reservations'] = get_reservations()
+    context['previous_reservations'] = PreviousReservation.objects.all()
     return render(request, 'rentals/index.html', context=context)
