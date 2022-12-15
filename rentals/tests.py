@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rentals.models import Rental
 from rentals.models import Reservation
-from rentals.views import *
+from rentals.models import PreviousReservation
 
 class ViewTest(TestCase):
 
@@ -89,28 +89,28 @@ class ViewTest(TestCase):
 
         print('... TESTING PREVIOUS RESERVATION ID ')
 
-        all_reservations = get_reservations()
+        all_reservations = PreviousReservation.objects.all()
 
         d = dict()
         r = dict()
 
         for res in all_reservations:
-            r[res[1]] = res
-            if res[0] in d.keys():
-                d[res[0]].append({
-                    'rental': res[0],
-                    'id': res[1],
-                    'checkin': res[2],
-                    'checkout': res[3],
-                    'previous': res[4]
+            r[res.reservation_id] = res
+            if res.rental_name in d.keys():
+                d[res.rental_name].append({
+                    'rental': res.rental_name,
+                    'id': res.reservation_id,
+                    'checkin': res.reservation_checkin,
+                    'checkout': res.reservation_checkout,
+                    'previous': res.previous_reservation_id
                 })
             else:
-                d[res[0]] = [{
-                    'rental': res[0],
-                    'id': res[1],
-                    'checkin': res[2],
-                    'checkout': res[3],
-                    'previous': res[4]
+                d[res.rental_name] = [{
+                    'rental': res.rental_name,
+                    'id': res.reservation_id,
+                    'checkin': res.reservation_checkin,
+                    'checkout': res.reservation_checkout,
+                    'previous': res.previous_reservation_id
                 }]
 
         rentals = Rental.objects.all()
